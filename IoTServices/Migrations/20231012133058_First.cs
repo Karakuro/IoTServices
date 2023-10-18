@@ -15,14 +15,14 @@ namespace IoTServices.Migrations
                 name: "IotData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdDevice = table.Column<int>(type: "int", nullable: false),
-                    Temperatura = table.Column<float>(type: "real", nullable: false),
-                    Umidita = table.Column<float>(type: "real", nullable: false),
-                    Pressione = table.Column<float>(type: "real", nullable: false),
-                    Altitudine = table.Column<float>(type: "real", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IdDevice = table.Column<int>(type: "INTEGER", nullable: false),
+                    Temperatura = table.Column<float>(type: "REAL", nullable: false),
+                    Umidita = table.Column<float>(type: "REAL", nullable: false),
+                    Pressione = table.Column<float>(type: "REAL", nullable: false),
+                    Altitudine = table.Column<float>(type: "REAL", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

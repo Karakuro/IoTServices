@@ -1,4 +1,5 @@
 using IoTServices.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-string connStr = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddSqlServer<IotDbContext>(connStr);
+builder.Services.AddCors(x => 
+    x.AddDefaultPolicy(config => 
+        config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+    )
+);
+
+//string connStr = builder.Configuration.GetConnectionString("Default");
+//builder.Services.AddSqlServer<IotDbContext>(connStr);
+string connStrSqlLite = builder.Configuration.GetConnectionString("SqlLite");
+builder.Services.AddSqlite<IotDbContext>(connStrSqlLite);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -22,7 +31,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+using(var scope = app.Services.CreateScope())
+{
+    var ctx = scope.ServiceProvider.GetService<IotDbContext>();
+    ctx.Database.Migrate();
+}
+
+app.UseCors();
+
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
